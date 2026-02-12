@@ -4,6 +4,8 @@ With this World of Warcraft AddOn you can save your current Talent Specs and if 
 It was created for situations like during the raid, when you have to switch your spec for one Boss only so you don't have that much time and you don't want to look up your saved talent specs so you don't make mistakes while speccing in a hurry.
 It was initially created for my ViroUI pack but due to popular demand I released it independently.
 
+Requires nampower >= v2.35.0 for fast talent loading.
+
 # Showcase
 <img src="http://oi62.tinypic.com/1492lur.jpg"></img><br \>
 [![Talentsaver 1.4 Preview on Youtube](http://i.imgur.com/aNjG5bV.png)](https://www.youtube.com/watch?v=8au61bMst10 "Talentsaver 1.4 Preview on Youtube")

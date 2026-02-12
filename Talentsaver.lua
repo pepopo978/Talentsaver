@@ -225,6 +225,7 @@ function DoubleCheck(name)
             end
         end
     end
+    return true
 end
 function Increment()
 	if vars.int < GetNumTalents(vars.tab) then 
@@ -266,16 +267,23 @@ CreateFrame("Frame","Talentsaver",UIParent)
 Talentsaver:SetScript('OnUpdate', function()
 	if vars.isLoading and vars.Name then
             -- ====== DELAY CODE ====== --
-		local _, _, latency = GetNetStats()
-		local delay = (latency/50*0.4)
+		local delay = 0.1
 		if TALENTS_SAVED.DELAY ~= -1 then delay = TALENTS_SAVED.DELAY/1000 end
 		if vars.firstCall then
 			vars.firstCall = false
-			local first, second, third = GetTalentPointsSpent()
+			vars.startTime = GetTime()
 			-- calculate and format the estimated loading time
-			local pointsleft = TALENTS_SAVED["INFO"][vars.Name][4] - first - second - third
+			local talentsleft = 0
+			for tree = 1, 3 do
+				for talent = 1, GetNumTalents(tree) do
+					local _, _, _, _, spent = GetTalentInfo(tree, talent)
+					if spent < TALENTS_SAVED["BUILDS"][vars.Name][tree][talent] then
+						talentsleft = talentsleft + 1
+					end
+				end
+			end
 			local estimate = ""
-			local timeleft = pointsleft * delay + 2 -- +2s to make it more accurate
+			local timeleft = talentsleft * delay + 2 -- +2s to make it more accurate
 			if timeleft > 60 then
 				local minutes = math.floor(timeleft/60)
 				local seconds = math.floor(timeleft - (minutes*60))
@@ -288,6 +296,10 @@ Talentsaver:SetScript('OnUpdate', function()
 			SendMSG("|cff3be7ed[Talentsaver]|r - Template '"..vars.Name.."' started loading. (Est. loading time: "..estimate.." )")
 		end
             -- ====== LOADING ====== --
+		if vars.startTime and not vars.isFinished and GetTime() - vars.startTime > 7 then
+			vars.isFinished = true
+			SendMSG("|cff3be7ed[Talentsaver]|r - Loading taking too long, cancelling.")
+		end
 		if ((vars.lastLoad+delay) <= GetTime()) then
             if vars.isFinished then
                 if DoubleCheck(vars.Name) then
@@ -297,17 +309,19 @@ Talentsaver:SetScript('OnUpdate', function()
                 end
             else
                 local _, _, _, _, spent = GetTalentInfo(vars.tab,vars.int)
-                if spent < TALENTS_SAVED["BUILDS"][vars.Name][vars.tab][vars.int] then        -- there was somehow a bug attempt to index field ? a nil value
-                    LearnTalent(vars.tab,vars.int)
-                    if spent == TALENTS_SAVED["BUILDS"][vars.Name][vars.tab][vars.int] then
-                        Increment()
+                local desired = TALENTS_SAVED["BUILDS"][vars.Name][vars.tab][vars.int]
+                if spent < desired then
+                    if LearnTalentRank then
+                        LearnTalentRank(vars.tab, vars.int, desired)
+                    else
+                        LearnTalent(vars.tab,vars.int)
                     end
                     vars.lastLoad = GetTime()
-                else
+                elseif spent >= desired then
                     Increment()
                     vars.lastLoad = GetTime()-(delay+1)
                 end
-                if vars.tab == 3 and vars.int == GetNumTalents(vars.tab) then vars.isFinished = true end
+                if vars.tab > 3 then vars.isFinished = true end
             end
 		end
 	end

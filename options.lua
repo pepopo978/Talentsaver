@@ -44,32 +44,17 @@ function TalentsaverFu:OnTooltipUpdate()
     if table.getn(TALENTS_SAVED["LIST"]) == 0 then
         cat:AddLine('text2', "NO SAVED BUILDS FOUND")
     else
-        if GetUnspentTalentPoints() == 0 or TALENTSAVER_IsLoading() then
-            for b=1, table.getn(TALENTS_SAVED["LIST"]) do
-                if TALENTS_SAVED["LIST"][b] == "" then return end
-                local name = TALENTS_SAVED["LIST"][b];
-                local buildinfo = TALENTS_SAVED["INFO"][name][1].."/"..TALENTS_SAVED["INFO"][name][2].."/"..TALENTS_SAVED["INFO"][name][3];
-                if name == GetCurrentBuild() then
-                    cat:AddLine(
-                        'text', "|cff3be7ed"..b..".|r",
-                        'text2', "|cff3be7ed"..buildinfo.."|r",
-                        'text3', "|cff3be7ed"..name.."|r"
-                    )
-                else
-                    cat:AddLine(
-                        'text', b..".",
-                        'text2', buildinfo,
-                        'text3', name,
-                        'text2R', 1,'text2G', 1,'text2B', 1,
-                        'text3R', 1,'text3G', 1,'text3B', 1
-                    )
-                end
-            end
-        else -- there are unspent points
-            for b=1, table.getn(TALENTS_SAVED["LIST"]) do
-                if TALENTS_SAVED["LIST"][b] == "" then return end
-                local name = TALENTS_SAVED["LIST"][b];
-                local buildinfo = TALENTS_SAVED["INFO"][name][1].."/"..TALENTS_SAVED["INFO"][name][2].."/"..TALENTS_SAVED["INFO"][name][3];
+        for b=1, table.getn(TALENTS_SAVED["LIST"]) do
+            if TALENTS_SAVED["LIST"][b] == "" then return end
+            local name = TALENTS_SAVED["LIST"][b];
+            local buildinfo = TALENTS_SAVED["INFO"][name][1].."/"..TALENTS_SAVED["INFO"][name][2].."/"..TALENTS_SAVED["INFO"][name][3];
+            if name == GetCurrentBuild() then
+                cat:AddLine(
+                    'text', "|cff3be7ed"..b..".|r",
+                    'text2', "|cff3be7ed"..buildinfo.."|r",
+                    'text3', "|cff3be7ed"..name.."|r"
+                )
+            else
                 cat:AddLine(
                     'text', b..".",
                     'text2', buildinfo,

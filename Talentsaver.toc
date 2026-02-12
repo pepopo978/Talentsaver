@@ -1,6 +1,6 @@
 ## Interface: 11200
 ## Title: Talentsaver
-## Version: 1.4
+## Version: 1.5
 ## Notes: Save & Load your Talents easily with this AddOn. Originally created for ViroUI.
 ## Author: MOUZU (LYQ/Virose)
 ## URL: https://github.com/MOUZU/Talentsaver
