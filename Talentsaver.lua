@@ -311,10 +311,18 @@ Talentsaver:SetScript('OnUpdate', function()
                 local _, _, _, _, spent = GetTalentInfo(vars.tab,vars.int)
                 local desired = TALENTS_SAVED["BUILDS"][vars.Name][vars.tab][vars.int]
                 if spent < desired then
-                    if LearnTalentRank then
-                        LearnTalentRank(vars.tab, vars.int, desired)
-                    else
-                        LearnTalent(vars.tab,vars.int)
+                    local _, _, currentTier = GetTalentInfo(vars.tab, vars.int)
+                    for i = vars.int, GetNumTalents(vars.tab) do
+                        local _, _, tier, _, s = GetTalentInfo(vars.tab, i)
+                        if tier ~= currentTier then break end
+                        local d = TALENTS_SAVED["BUILDS"][vars.Name][vars.tab][i]
+                        if s < d then
+                            if LearnTalentRank then
+                                LearnTalentRank(vars.tab, i, d)
+                            else
+                                LearnTalent(vars.tab, i)
+                            end
+                        end
                     end
                     vars.lastLoad = GetTime()
                 elseif spent >= desired then
