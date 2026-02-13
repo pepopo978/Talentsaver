@@ -283,7 +283,7 @@ Talentsaver:SetScript('OnUpdate', function()
 				end
 			end
 			local estimate = ""
-			local timeleft = talentsleft * delay + 2 -- +2s to make it more accurate
+			local timeleft = talentsleft * delay + 5 -- +5s to make it more accurate
 			if timeleft > 60 then
 				local minutes = math.floor(timeleft/60)
 				local seconds = math.floor(timeleft - (minutes*60))
@@ -296,7 +296,7 @@ Talentsaver:SetScript('OnUpdate', function()
 			SendMSG("|cff3be7ed[Talentsaver]|r - Template '"..vars.Name.."' started loading. (Est. loading time: "..estimate.." )")
 		end
             -- ====== LOADING ====== --
-		if vars.startTime and not vars.isFinished and GetTime() - vars.startTime > 7 then
+		if vars.startTime and not vars.isFinished and GetTime() - vars.startTime > 15 then
 			vars.isFinished = true
 			SendMSG("|cff3be7ed[Talentsaver]|r - Loading taking too long, cancelling.")
 		end
